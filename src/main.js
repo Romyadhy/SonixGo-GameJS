@@ -1,5 +1,5 @@
 import k from "./kaplayCTX";
-import mainMenu from "./scenes/main-menu";
+import mainMenu from "./scenes/mainMenu";
 
 k.loadSprite("chemical-bg", "pic/chemical-bg.png");
 k.loadSprite("platforms", "pic/platforms.png");
@@ -26,7 +26,7 @@ k.loadSprite("motobug", "pic/motobug.png", {
     },
 });
 k.loadFont("mania", "font/mania.ttf");
-k.loadSound("destroy", "sound/Destroy.wav");
+k.loadSound("destroy", "sound/Destroy.wav"); 
 k.loadSound("hurt", "sound/Hurt.wav");
 k.loadSound("hyper-ring", "sound/HiperRing.wav");
 k.loadSound("jump", "sound/Jump.wav");
