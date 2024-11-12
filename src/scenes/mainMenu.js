@@ -6,7 +6,7 @@ export default function mainMenu(){
     k.onButtonPress("jump", () => k.go("game"));
 
     const bgPieceWidth = 1920;
-    const bgPiece = [
+    const bgPieces = [
         k.add([k.sprite("chemical-bg"), k.pos(0, 0), k.opacity(0.8), k.scale(2)]), 
         k.add([k.sprite("chemical-bg"), k.pos(bgPieceWidth * 2, 0), k.opacity(0.8), k.scale(2)]), 
      ];
@@ -33,13 +33,15 @@ export default function mainMenu(){
 
     const gameSpeed = 4000;
     k.onUpdate(() => {
-        if (bgPiece[1].pos.x < 0) {
-            bgPiece[0].moveTo(bgPiece[1].pos.x + bgPieceWidth * 2, 0);
-            bgPiece.push(bgPiece.shift());
+        if (bgPieces[1].pos.x < 0) {
+            bgPieces[0].moveTo(bgPieces[1].pos.x + bgPieceWidth * 2, 0);
+            bgPieces.push(bgPieces.shift());
         }
 
-        bgPiece[0].move(-100, 0)
-        bgPiece[1].moveTo(bgPiece[0].pos.x + bgPieceWidth * 2, 0);
+        bgPieces[0].move(-100, 0)
+        bgPieces[1].moveTo(bgPieces[0].pos.x + bgPieceWidth * 2, 0);
+
+       
 
        if (platforms[1].pos.x < 0) {
         platforms[0].moveTo(platforms[1].pos.x + platforms[1].width * 4, 450);
