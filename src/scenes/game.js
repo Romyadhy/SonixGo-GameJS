@@ -1,6 +1,7 @@
 import k from "../kaplayCTX";
 import { makeSonic } from "../entities/sonic";
 import { createMotobug } from "../entities/motobug";
+import { makeRing } from "../entities/ring";
 
 
 
@@ -19,6 +20,15 @@ export default function game() {
         k.add([k.sprite("platforms"), k.pos(platformWidth *4, 450), k.scale(4)]),
     ];
 
+   
+   let score = 0;
+   let scoreMultiplayer = 0; 
+
+   const textScore = k.add([
+    k.text("Score : 0", {font: "mania", size: 72}),
+    k.pos(20, 30),
+   ]);
+
    const sonic = makeSonic(k.vec2(200, 745))
    //Call the method to jump
    sonic.setJumpSonic();
@@ -30,12 +40,20 @@ export default function game() {
         k.destroy(enemy);
         sonic.play("jump");
         sonic.jump();
+        scoreMultiplayer += 1;
+        score += 10 * scoreMultiplayer;
+        textScore.text = `Score : ${score}`
         return;
     }
-
     k.play("hurt", {volume: 0.3});
     k.go("gameover");
+   });
 
+   sonic.onCollide("ring", (ring) => {
+    k.play("ring", {volume: 0.5});
+    k.destroy(ring);
+    score++;
+    textScore.text = `Score : ${score}`
    });
 
     let gameSpeed = 300;
@@ -65,6 +83,23 @@ export default function game() {
     };
     spawnMotobug();
 
+    // Spawn Ring
+    const spawnRing = () => {
+        const ring = makeRing(k.vec2(1950, 745));
+        ring.onUpdate(() => {
+            ring.move(-gameSpeed, 0);
+        });
+
+        ring.onExitScreen(() => {
+            if(ring.pos.x < 0) k.destroy(ring);
+        });
+
+        const waitTime = k.rand(0.5, 3)
+        k.wait(waitTime, spawnRing);
+    };
+
+    spawnRing();
+
     k.add([
         k.opacity(0),
         k.rect(1920, 300),
@@ -73,7 +108,10 @@ export default function game() {
         k.body({isStatic: true}),
     ]);
 
+
     k.onUpdate(() => {
+        if(sonic.isGrounded()) scoreMultiplayer = 0;
+
         if (bgPieces[1].pos.x < 0) {
             bgPieces[0].moveTo(bgPieces[1].pos.x + bgPieceWidth * 2, 0);
             bgPieces.push(bgPieces.shift());
