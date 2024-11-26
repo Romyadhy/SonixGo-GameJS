@@ -7,6 +7,8 @@ import { makeRing } from "../entities/ring";
 
 export default function game() {
     k.setGravity(3100);
+    // Play backsound
+    const citySfx =  k.play("city", {volume: 0.1, loop: true});
 
     const bgPieceWidth = 1920;
     const bgPieces = [
@@ -43,17 +45,22 @@ export default function game() {
         scoreMultiplayer += 1;
         score += 10 * scoreMultiplayer;
         textScore.text = `Score : ${score}`
+        sonic.ringCollectUI.text = "+BIRJON"
+        k.wait(1, () => sonic.ringCollectUI.text = "")
         return;
     }
     k.play("hurt", {volume: 0.3});
-    k.go("gameover");
+    k.setData("current-score", score)
+    k.go("gameover", citySfx);
    });
 
    sonic.onCollide("ring", (ring) => {
-    k.play("ring", {volume: 0.5});
-    k.destroy(ring);
-    score++;
-    textScore.text = `Score : ${score}`
+        k.play("ring", {volume: 0.5});
+        k.destroy(ring);
+        score++;
+        textScore.text = `Score : ${score}`
+        sonic.ringCollectUI.text = "+birjon";
+        k.wait(1, () => sonic.ringCollectUI.text = "");
    });
 
     let gameSpeed = 300;
